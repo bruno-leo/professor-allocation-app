@@ -12,7 +12,8 @@ class DepartmentRepository(
     fun saveDepartment(
         department: Department,
         onCall: () -> Unit,
-        onError: () -> Unit) {
+        onError: () -> Unit
+    ) {
         departmentService.save(department).enqueue(object : Callback<Any> {
             override fun onResponse(p0: Call<Any>, p1: Response<Any>) {
                 onCall()
@@ -21,7 +22,6 @@ class DepartmentRepository(
             override fun onFailure(p0: Call<Any>, p1: Throwable) {
                 onError()
             }
-
         })
     }
 
@@ -89,21 +89,22 @@ class DepartmentRepository(
 
         })
 
-        fun deleteDepartment(
-            id: Int,
-            onCall: () -> Unit,
-            onError: (message: String) -> Unit
-        ) {
-            departmentService.delete(id).enqueue(object : Callback<Any> {
-                override fun onResponse(p0: Call<Any>, p1: Response<Any>) {
-                    TODO("Not yet implemented")
-                }
+    }
 
-                override fun onFailure(p0: Call<Any>, p1: Throwable) {
-                    TODO("Not yet implemented")
-                }
+    fun deleteDepartment(
+        id: Int,
+        onCall: () -> Unit,
+        onError: (message: String) -> Unit
+    ) {
+        departmentService.delete(id).enqueue(object : Callback<Any> {
+            override fun onResponse(p0: Call<Any>, p1: Response<Any>) {
+                onCall()
+            }
 
-            })
-        }
+            override fun onFailure(p0: Call<Any>, p1: Throwable) {
+                p1.message?.let { onError(it) }
+            }
+
+        })
     }
 }
