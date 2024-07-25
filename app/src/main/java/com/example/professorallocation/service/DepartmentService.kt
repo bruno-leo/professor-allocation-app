@@ -1,6 +1,6 @@
 package com.example.professorallocation.service
 
-import com.example.retrofit.model.Department
+import com.example.professorallocation.model.Department
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -18,7 +18,7 @@ interface DepartmentService {
     fun getById(@Path("id") id: Int) : Call<Department>
 
     @POST("departments/{id}")
-    fun save(@Body department: Department) : Call<Department>
+    fun save(@Body department: Department) : Call<Any>
 
     @PUT("departments/{id}")
     fun update(@Path("id") id: Int, @Body department: Department) : Call<Department>

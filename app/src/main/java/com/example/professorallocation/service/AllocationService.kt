@@ -1,6 +1,6 @@
 package com.example.professorallocation.service
 
-import com.example.retrofit.model.Allocation
+import com.example.professorallocation.model.Allocation
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -18,7 +18,7 @@ interface AllocationService {
     fun getById(@Path("id") id: Int) : Call<Allocation>
 
     @POST("allocations/{id}")
-    fun save(@Body allocation: Allocation) : Call<Allocation>
+    fun save(@Body allocation: Allocation) : Call<Any>
 
     @PUT("allocations/{id}")
     fun update(@Path("id") id: Int, @Body allocation: Allocation) : Call<Allocation>

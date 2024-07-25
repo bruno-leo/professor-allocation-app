@@ -14,11 +14,11 @@ interface CourseService {
     @GET("courses")
     fun getAll(): Call<List<Course>>
 
-    @POST("courses")
-    fun save(@Body course: Course): Call<Any>
-
     @GET("courses/{id}")
     fun getById(@Path("id") id: Int): Call<Course>
+
+    @POST("courses")
+    fun save(@Body course: Course): Call<Any>
 
     @PUT("courses/{id}")
     fun update(@Path("id") id: Int, @Body course: Course): Call<Course>

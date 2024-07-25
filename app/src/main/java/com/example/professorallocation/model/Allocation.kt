@@ -1,6 +1,5 @@
-package com.example.retrofit.model
+package com.example.professorallocation.model
 
-import com.example.professorallocation.model.Course
 import java.sql.Time
 import java.time.DayOfWeek
 

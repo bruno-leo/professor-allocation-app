@@ -14,9 +14,9 @@ class CustomAdapter(
         return CustomHolder(layoutView)
     }
 
-    override fun getItemCount(): Int = list.size
-
     override fun onBindViewHolder(holder: CustomHolder, position: Int) {
         holder.configure(list[position])
     }
+
+    override fun getItemCount(): Int = list.size
 }

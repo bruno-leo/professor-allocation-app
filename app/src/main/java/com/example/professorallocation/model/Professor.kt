@@ -1,4 +1,4 @@
-package com.example.retrofit.model
+package com.example.professorallocation.model
 
 data class Professor(
     val id: Int,
