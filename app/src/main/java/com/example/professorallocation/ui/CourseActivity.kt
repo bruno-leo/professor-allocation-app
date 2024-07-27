@@ -2,12 +2,14 @@ package com.example.professorallocation.ui
 
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import com.example.professorallocation.R
 import com.example.professorallocation.repository.CourseRepository
 import com.example.professorallocation.repository.RetrofitConfig
 import com.example.professorallocation.utils.CustomAdapter
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class CourseActivity : MainActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,6 +24,20 @@ class CourseActivity : MainActivity() {
         val courseRepository = CourseRepository(RetrofitConfig.courseService)
 
         getCourses(courseRepository)
+        addCourse(courseRepository)
+    }
+
+    private fun addCourse(repository: CourseRepository) {
+        val btAddCourse = findViewById<FloatingActionButton>(R.id.btAddCourse)
+        btAddCourse.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Modal Title")
+            builder.setMessage("This is a modal dialog.")
+            builder.setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
+            builder.create().show()
+        }
     }
 
     private fun getCourses(repository: CourseRepository) {
