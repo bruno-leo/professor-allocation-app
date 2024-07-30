@@ -2,16 +2,24 @@ package com.example.professorallocation.ui
 
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.widget.Button
+import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import com.example.professorallocation.R
+import com.example.professorallocation.model.Course
 import com.example.professorallocation.repository.CourseRepository
 import com.example.professorallocation.repository.RetrofitConfig
-import com.example.professorallocation.utils.CustomAdapter
+import com.example.professorallocation.utils.CourseAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class CourseActivity : MainActivity() {
+    private lateinit var rv: RecyclerView
+    private lateinit var adapter: CourseAdapter
+    private lateinit var repository: CourseRepository
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_course)
@@ -21,76 +29,106 @@ class CourseActivity : MainActivity() {
         setSupportActionBar(mainToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        val courseRepository = CourseRepository(RetrofitConfig.courseService)
-
-        getCourses(courseRepository)
-        addCourse(courseRepository)
-    }
-
-    private fun addCourse(repository: CourseRepository) {
-        val btAddCourse = findViewById<FloatingActionButton>(R.id.btAddCourse)
-        btAddCourse.setOnClickListener {
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle("Modal Title")
-            builder.setMessage("This is a modal dialog.")
-            builder.setPositiveButton("OK") { dialog, _ ->
-                dialog.dismiss()
+        repository = CourseRepository(RetrofitConfig.courseService)
+        rv = findViewById(R.id.rvCourseList)
+        adapter = CourseAdapter(
+            onEdit = { id, course ->
+                updateCourse(id, course)
+            },
+            onDelete = { id ->
+                deleteCourse(id)
             }
-            builder.create().show()
-        }
-    }
+        )
+        rv.adapter = adapter
 
-    private fun getCourses(repository: CourseRepository) {
-        return repository.getCourses(
-            onCall = { courses ->
+        var courses: List<Course>? = emptyList()
+        repository.getCourses(
+            onCall = { list ->
                 Log.i(">>>", "success get courses")
-                val rvList = findViewById<RecyclerView>(R.id.rvCourseList)
-                rvList.adapter = courses?.map { it.name }?.let { CustomAdapter(it) }
+                courses = list
             },
             onError = {
                 Log.e(">>>", "error get courses $it")
             }
         )
+        courses?.let { adapter.addCourses(it) }
+
+//        getCourses()
+        addCourse()
     }
 
-    fun getCourseById(repository: CourseRepository, field: String) {
-        // mudar de String para Int / ver aula 4 pt 3 , na ultima hora
+    fun addCourse() {
+        val btAddCourse = findViewById<FloatingActionButton>(R.id.btAddCourse)
+        btAddCourse.setOnClickListener {
+            addCourseDialog()
+        }
+    }
 
+    fun addCourseDialog() {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_course, null)
+        val editText = dialogView.findViewById<EditText>(R.id.editTextCourse)
+        val buttonCancel = dialogView.findViewById<Button>(R.id.buttonCancelDiaologCourse)
+        val buttonConfirm = dialogView.findViewById<Button>(R.id.buttonConfirmDiaologCourse)
 
-        val id = field.toString().toInt()
+        val alertDialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .create()
 
-        repository.getCourseById(
-            id,
-            {},
-            {}
+        buttonCancel.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        buttonConfirm.setOnClickListener {
+            val inputText = editText.text.toString()
+            val newCourse = Course(
+                id = null,
+                name = inputText
+            )
+            saveCourse(repository, newCourse)
+            alertDialog.dismiss()
+            // TODO recarregar lista
+        }
+
+        alertDialog.show()
+    }
+
+    /*fun getCourses() {
+        var courses: List<Course>? = emptyList()
+        repository.getCourses(
+            onCall = { list ->
+                Log.i(">>>", "success get courses")
+                courses = list
+            },
+            onError = {
+                Log.e(">>>", "error get courses $it")
+            }
         )
-    }
 
-    /*fun saveCourse(repository: CourseRepository, course: Course) {
+        courses?.let { adapter.addCourses(it) }
+    }*/
+
+    fun saveCourse(repository: CourseRepository, course: Course) {
         repository.saveCourse(
             course,
             {},
             {}
         )
-    }*/
+    }
 
-    /*fun updateCourse(repository: CourseRepository, id: String, course: Course) {
-        // mudar de String para Int / ver aula 4 pt 3 , na ultima hora
-
+    fun updateCourse(id: Int, course: Course) {
         repository.updateCourse(
             id,
             course,
             {},
             {}
         )
-    }*/
+    }
 
-    /*fun deleteCourse(repository: CourseRepository, id: String) {
-        // mudar de String para Int / ver aula 4 pt 3 , na ultima hora
-        // consultar para saber se o curso existe
-        // se sim -> excluir
-        // se nao -> msg erro
-
-
-    }*/
+    fun deleteCourse(id: Int) {
+        repository.deleteCourse(
+            id,
+            {},
+            {}
+        )
+    }
 }
