@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/llAddDepartment"
+    android:id="@+id/llAddProfessor"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp">
 
@@ -10,34 +10,42 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingBottom="10dp"
-        android:text="Add a Department"
+        android:text="Add a Professor"
         android:textSize="15sp" />
 
     <EditText
-        android:id="@+id/etNameDepartment"
+        android:id="@+id/editTextNameProfessor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="15sp"
-        android:hint="Enter name" />
+        android:hint="Enter name"
+        android:paddingBottom="15dp"/>
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:gravity="end"
+        android:orientation="horizontal"
         android:paddingTop="15dp">
 
         <Button
-            android:id="@+id/btCancelNewDepartment"
+            android:id="@+id/btCancelNewProfessor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="10dp"
-            android:text="Cancel"/>
+            android:text="Cancel" />
 
         <Button
-            android:id="@+id/btConfirmNewDepartment"
+            android:id="@+id/btConfirmNewProfessor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Save" />
     </LinearLayout>
+
 </LinearLayout>

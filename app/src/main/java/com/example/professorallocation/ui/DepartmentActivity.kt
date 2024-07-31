@@ -13,8 +13,7 @@ import com.example.professorallocation.R
 import com.example.professorallocation.model.Department
 import com.example.professorallocation.repository.DepartmentRepository
 import com.example.professorallocation.repository.RetrofitConfig
-import com.example.professorallocation.utils.CourseAdapter
-import com.example.professorallocation.utils.DeparmentAdapter
+import com.example.professorallocation.adapter.DeparmentAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class DepartmentActivity : AppCompatActivity() {
@@ -43,22 +42,22 @@ class DepartmentActivity : AppCompatActivity() {
         )
         rv.adapter = adapter
 
-        getDepartments(repository)
-        addDepartment(repository)
+        getDepartments()
+        addDepartment()
     }
 
-    fun addDepartment(repository: DepartmentRepository) {
+    fun addDepartment() {
         val btAddDepartment = findViewById<FloatingActionButton>(R.id.btAddDepartment)
         btAddDepartment.setOnClickListener {
-            addDepartmentDialog(repository)
+            addDepartmentDialog()
         }
     }
 
-    fun addDepartmentDialog(repository: DepartmentRepository) {
+    fun addDepartmentDialog() {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_department, null)
-        val editText = dialogView.findViewById<EditText>(R.id.editTextDepartment)
-        val buttonCancel = dialogView.findViewById<Button>(R.id.buttonCancelDiaologDepartment)
-        val buttonConfirm = dialogView.findViewById<Button>(R.id.buttonConfirmDiaologDepartment)
+        val editText = dialogView.findViewById<EditText>(R.id.etNameDepartment)
+        val buttonCancel = dialogView.findViewById<Button>(R.id.btCancelNewDepartment)
+        val buttonConfirm = dialogView.findViewById<Button>(R.id.btConfirmNewDepartment)
 
         val alertDialog = AlertDialog.Builder(this)
             .setView(dialogView)
@@ -74,7 +73,7 @@ class DepartmentActivity : AppCompatActivity() {
                 id = null,
                 name = inputText
             )
-            saveDepartment(repository, newDepartment)
+            saveDepartment(newDepartment)
             alertDialog.dismiss()
             // TODO recarregar lista
         }
@@ -82,7 +81,7 @@ class DepartmentActivity : AppCompatActivity() {
         alertDialog.show()
     }
 
-    fun getDepartments(repository: DepartmentRepository) {
+    fun getDepartments() {
         return repository.getDepartments(
             onCall = { departments ->
                 Log.i(">>>", "success get departments")
@@ -94,7 +93,7 @@ class DepartmentActivity : AppCompatActivity() {
         )
     }
 
-    fun saveDepartment(repository: DepartmentRepository, department: Department) {
+    fun saveDepartment(department: Department) {
         repository.saveDepartment(
             department,
             {},
@@ -112,10 +111,18 @@ class DepartmentActivity : AppCompatActivity() {
     }
 
     fun deleteDeparment(id: Int) {
-        repository.deleteDepartment(
-            id,
-            {},
-            {}
-        )
+        val alertDialog = AlertDialog.Builder(this)
+        alertDialog.setTitle("Confirm deletion")
+        alertDialog.setMessage("Are you sure you want to delete this item?")
+
+        alertDialog.setNegativeButton("Cancel") { dialog, which ->
+            dialog.dismiss()
+        }
+
+        alertDialog.setPositiveButton("Confirm") { dialog, which ->
+            repository.deleteDepartment(id, {}, {})
+        }
+
+        alertDialog.show()
     }
 }

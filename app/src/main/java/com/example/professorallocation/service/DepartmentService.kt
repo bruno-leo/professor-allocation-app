@@ -17,7 +17,7 @@ interface DepartmentService {
     @GET("departments/{id}")
     fun getById(@Path("id") id: Int) : Call<Department>
 
-    @POST("departments/{id}")
+    @POST("departments")
     fun save(@Body department: Department) : Call<Any>
 
     @PUT("departments/{id}")

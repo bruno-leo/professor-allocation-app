@@ -2,14 +2,15 @@ package com.example.professorallocation.ui
 
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import com.example.professorallocation.R
+import com.example.professorallocation.adapter.ProfessorAdapter
+import com.example.professorallocation.model.Professor
 import com.example.professorallocation.repository.ProfessorRepository
 import com.example.professorallocation.repository.RetrofitConfig
-import com.example.professorallocation.utils.CourseAdapter
-import com.example.professorallocation.utils.ProfessorAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class ProfessorActivity : AppCompatActivity() {
@@ -17,7 +18,7 @@ class ProfessorActivity : AppCompatActivity() {
     private lateinit var adapter: ProfessorAdapter
     private lateinit var repository: ProfessorRepository
 
-    /*override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_professor)
 
@@ -29,34 +30,68 @@ class ProfessorActivity : AppCompatActivity() {
         repository = ProfessorRepository(RetrofitConfig.professorService)
         rv = findViewById(R.id.rvProfessorsList)
         adapter = ProfessorAdapter(
-
+            onEdit = { id, professor ->
+                updateProfessor(id, professor)
+            },
+            onDelete = { id ->
+                deleteProfessor(id)
+            }
         )
         rv.adapter = adapter
 
         getProfessors(repository)
         addProfessor(repository)
-    }*/
+    }
 
-    /*fun addProfessor(repository: ProfessorRepository) {
+    fun addProfessor(repository: ProfessorRepository) {
         val btAddProfessor = findViewById<FloatingActionButton>(R.id.btAddProfessor)
         btAddProfessor.setOnClickListener {
             addProfessorDialog()
         }
-    }*/
+    }
 
-    /*fun addProfessorDialog() {}*/
+    fun addProfessorDialog() {
 
-    /*fun getProfessors(repository: ProfessorRepository) {
+    }
+
+    fun getProfessors(repository: ProfessorRepository) {
         return repository.getProfessors(
             onCall = { professors ->
                 Log.i(">>>", "success get professors")
-//                val rvList = findViewById<RecyclerView>(R.id.rvProfessorsList)
-//                rvList.adapter = professors?.map { it.name }?.let { CourseAdapter(it) }
-                professors?.let {  }
+                professors?.let { adapter.addProfessors(it) }
             },
             onError = {
                 Log.e(">>>", "error get professors $it")
             }
         )
-    }*/
+    }
+
+    fun saveProfessor(professor: Professor) = repository.saveProfessor(
+        professor,
+        {},
+        {}
+    )
+
+    fun updateProfessor(id: Int, professor: Professor) = repository.updateProfessor(
+        id,
+        professor,
+        {},
+        {}
+    )
+
+    fun deleteProfessor(id: Int) {
+        val alertDialog = AlertDialog.Builder(this)
+        alertDialog.setTitle("Confirm deletion")
+        alertDialog.setMessage("Are you sure you want to delete this item?")
+
+        alertDialog.setNegativeButton("Cancel") { dialog, which ->
+            dialog.dismiss()
+        }
+
+        alertDialog.setPositiveButton("Confirm") { dialog, which ->
+            repository.deleteProfessor(id, {}, {})
+        }
+
+        alertDialog.show()
+    }
 }
