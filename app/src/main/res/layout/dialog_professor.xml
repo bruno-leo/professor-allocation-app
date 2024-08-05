@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/llAddProfessor"
+    android:id="@+id/llProfessor"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -9,22 +9,41 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="10dp"
+        android:paddingBottom="15dp"
         android:text="Add a Professor"
         android:textSize="15sp" />
 
     <EditText
-        android:id="@+id/editTextNameProfessor"
+        android:id="@+id/etProfessorName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="15sp"
         android:hint="Enter name"
         android:paddingBottom="15dp"/>
 
-    <Spinner
-        android:id="@+id/spinner"
+    <EditText
+        android:id="@+id/etProfessorCpf"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:hint="Enter CPF"
+        android:paddingBottom="15dp"/>
+
+    <TextView
+        android:id="@+id/tvSelectDepartment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Select a department"
+        android:paddingTop="15dp"
+        />
+
+    <Spinner
+        android:id="@+id/spDepartmentList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:layout_margin="15dp"
+        android:spinnerMode="dropdown"
         />
 
     <LinearLayout

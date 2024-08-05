@@ -8,7 +8,8 @@ import com.example.professorallocation.R
 import com.example.professorallocation.model.Professor
 
 class ProfessorHolder(rootView: View) : ViewHolder(rootView) {
-    var tvView: TextView = rootView.findViewById(R.id.tvTextItem)
+    var tvProfessorName: TextView = rootView.findViewById(R.id.tvTextItem)
+    var tvProfessorDepartmentName: TextView = rootView.findViewById(R.id.tvTextSubItem)
     var ibEdit: ImageButton = rootView.findViewById(R.id.ibEdit)
     var ibDelete: ImageButton = rootView.findViewById(R.id.ibDelete)
 
@@ -17,7 +18,8 @@ class ProfessorHolder(rootView: View) : ViewHolder(rootView) {
         onEdit: (id: Int, professor: Professor) -> Unit,
         onDelete: (id: Int) -> Unit)
     {
-        tvView.text = professor.name
+        tvProfessorName.text = professor.name
+        tvProfessorDepartmentName.text = professor.department?.name
 
         ibEdit.setOnClickListener {
             onEdit(professor.id!!, professor)
