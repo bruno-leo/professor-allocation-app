@@ -94,12 +94,17 @@ class CourseRepository(
         onError: (message: String) -> Unit
     ) {
         courseService.delete(id).enqueue(object : Callback<Any> {
-            override fun onResponse(p0: Call<Any>, p1: Response<Any>) {
-                TODO("Not yet implemented")
+            override fun onResponse(p0: Call<Any>, response: Response<Any>) {
+                response.isSuccessful.let {
+                    if (it)
+                        onCall()
+                    else
+                        onError(response.message())
+                }
             }
 
             override fun onFailure(p0: Call<Any>, p1: Throwable) {
-                TODO("Not yet implemented")
+                p1.message?.let { onError(it) }
             }
         })
     }
