@@ -54,7 +54,7 @@ class DepartmentActivity : AppCompatActivity() {
     }
 
     fun addDepartmentDialog() {
-        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_add_department, null)
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_department, null)
         val editText = dialogView.findViewById<EditText>(R.id.etNameDepartment)
         val buttonCancel = dialogView.findViewById<Button>(R.id.btCancelNewDepartment)
         val buttonConfirm = dialogView.findViewById<Button>(R.id.btConfirmNewDepartment)
@@ -94,35 +94,37 @@ class DepartmentActivity : AppCompatActivity() {
     }
 
     fun saveDepartment(department: Department) {
-        repository.saveDepartment(
-            department,
-            {},
-            {}
-        )
+        repository.saveDepartment(department, {}, {})
     }
 
     fun updateDepartment(id: Int, department: Department) {
-        repository.updateDepartment(
-            id,
-            department,
-            {},
-            {}
-        )
+        repository.updateDepartment(id, department, {}, {})
     }
 
     fun deleteDeparment(id: Int) {
-        val alertDialog = AlertDialog.Builder(this)
-        alertDialog.setTitle("Confirm deletion")
-        alertDialog.setMessage("Are you sure you want to delete this item?")
+        val alertQuestionDialog = AlertDialog.Builder(this)
+        alertQuestionDialog.setTitle("Confirm deletion")
+        alertQuestionDialog.setMessage("Are you sure you want to delete this item?")
 
-        alertDialog.setNegativeButton("Cancel") { dialog, which ->
+        val alertConfirmationDialog = AlertDialog.Builder(this)
+        alertConfirmationDialog.setTitle("Confirmed deletion")
+        alertConfirmationDialog.setMessage("Deleted item")
+
+        alertQuestionDialog.setNegativeButton("Cancel") { dialog, which ->
             dialog.dismiss()
         }
 
-        alertDialog.setPositiveButton("Confirm") { dialog, which ->
+        alertQuestionDialog.setPositiveButton("Confirm") { dialog, which ->
             repository.deleteDepartment(id, {}, {})
+            dialog.dismiss()
+            alertConfirmationDialog.show()
         }
 
-        alertDialog.show()
+        alertConfirmationDialog.setPositiveButton("Ok") { dialog , which ->
+            dialog.dismiss()
+            // TODO recarregar lista
+        }
+
+        alertQuestionDialog.show()
     }
 }
