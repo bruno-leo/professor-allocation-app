@@ -6,17 +6,16 @@ import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import com.example.professorallocation.R
+import com.example.professorallocation.adapter.DeparmentAdapter
 import com.example.professorallocation.model.Department
 import com.example.professorallocation.repository.DepartmentRepository
 import com.example.professorallocation.repository.RetrofitConfig
-import com.example.professorallocation.adapter.DeparmentAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class DepartmentActivity : AppCompatActivity() {
+class DepartmentActivity : MainActivity() {
     private lateinit var rv: RecyclerView
     private lateinit var adapter: DeparmentAdapter
     private lateinit var repository: DepartmentRepository

@@ -20,6 +20,7 @@ class ProfessorHolder(rootView: View) : ViewHolder(rootView) {
     {
         tvProfessorName.text = professor.name
         tvProfessorDepartmentName.text = professor.department?.name
+        if (tvProfessorDepartmentName.text != null) tvProfessorDepartmentName.visibility = View.VISIBLE
 
         ibEdit.setOnClickListener {
             onEdit(professor.id!!, professor)

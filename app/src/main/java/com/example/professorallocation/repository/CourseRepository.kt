@@ -32,10 +32,8 @@ class CourseRepository(
         courseService.getAll().enqueue(object : Callback<List<Course>> {
             override fun onResponse(p0: Call<List<Course>>, response: Response<List<Course>>) {
                 response.isSuccessful.let {
-                    if (it)
-                        onCall(response.body())
-                    else
-                        onError(response.message())
+                    if (it) onCall(response.body())
+                    else onError(response.message())
                 }
             }
 
@@ -53,10 +51,8 @@ class CourseRepository(
         courseService.getById(id).enqueue(object : Callback<Course> {
             override fun onResponse(p0: Call<Course>, response: Response<Course>) {
                 response.isSuccessful.let {
-                    if (it)
-                        onCall(response.body())
-                    else
-                        onError(response.message())
+                    if (it) onCall(response.body())
+                    else onError(response.message())
                 }
             }
 
@@ -75,10 +71,8 @@ class CourseRepository(
         courseService.update(id, course).enqueue(object : Callback<Course> {
             override fun onResponse(p0: Call<Course>, response: Response<Course>) {
                 response.isSuccessful.let {
-                    if (it)
-                        onCall(response.body())
-                    else
-                        onError(response.message())
+                    if (it) onCall(response.body())
+                    else onError(response.message())
                 }
             }
 
@@ -96,10 +90,8 @@ class CourseRepository(
         courseService.delete(id).enqueue(object : Callback<Any> {
             override fun onResponse(p0: Call<Any>, response: Response<Any>) {
                 response.isSuccessful.let {
-                    if (it)
-                        onCall()
-                    else
-                        onError(response.message())
+                    if (it) onCall()
+                    else onError(response.message())
                 }
             }
 

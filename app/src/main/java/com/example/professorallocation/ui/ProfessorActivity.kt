@@ -9,7 +9,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import com.example.professorallocation.R
@@ -22,7 +21,7 @@ import com.example.professorallocation.repository.ProfessorRepository
 import com.example.professorallocation.repository.RetrofitConfig
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class ProfessorActivity : AppCompatActivity() {
+class ProfessorActivity : MainActivity() {
     private lateinit var rv: RecyclerView
     private lateinit var adapter: ProfessorAdapter
     private lateinit var repository: ProfessorRepository
@@ -40,6 +39,7 @@ class ProfessorActivity : AppCompatActivity() {
 
         repository = ProfessorRepository(RetrofitConfig.professorService)
         departmentRepository = DepartmentRepository(RetrofitConfig.departmentService)
+
         rv = findViewById(R.id.rvProfessorsList)
         adapter = ProfessorAdapter(
             onEdit = { id, professor ->
