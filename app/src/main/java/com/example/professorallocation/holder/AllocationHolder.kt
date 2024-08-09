@@ -23,14 +23,14 @@ class AllocationHolder(rootView: View) : ViewHolder(rootView) {
         onEdit: (id: Int, allocation: Allocation) -> Unit,
         onDelete: (id: Int) -> Unit
     ) {
-        tvDay.text = allocation.day.toString()
-        tvStart.text = allocation.startHour.toString()
-        tvEnd.text = allocation.endHour.toString()
+        tvDay.text = allocation.day
+        tvStart.text = allocation.startHour
+        tvEnd.text = allocation.endHour
         tvProfessorName.text = allocation.professor?.name
         tvCourseName.text = allocation.course?.name
 
         ibEditAlloc.setOnClickListener {
-            onEdit(allocation.id!!, allocation)
+//            onEdit(allocation.id!!, allocation)
         }
 
         ibDeleteAlloc.setOnClickListener {

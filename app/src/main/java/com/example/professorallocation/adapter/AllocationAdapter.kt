@@ -13,7 +13,7 @@ class AllocationAdapter(
     val onDelete: (id: Int) -> Unit
 ) : Adapter<AllocationHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AllocationHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_allocation_layout, parent, false)
         return AllocationHolder(view)
     }
 

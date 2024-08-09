@@ -2,6 +2,7 @@ package com.example.professorallocation.ui
 
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import com.example.professorallocation.R
@@ -37,7 +38,7 @@ class AllocationActivity : MainActivity() {
 
             },
             onDelete = { id ->
-
+                deleteAllocation(id)
             }
         )
         rv.adapter = adapter
@@ -55,5 +56,32 @@ class AllocationActivity : MainActivity() {
                 Log.e(">>>", "error get allocations $it")
             }
         )
+    }
+
+    fun deleteAllocation(id: Int) {
+        val alertQuestionDialog = AlertDialog.Builder(this)
+        alertQuestionDialog.setTitle("Confirm deletion")
+        alertQuestionDialog.setMessage("Are you sure you want to delete this item?")
+
+        val alertConfirmationDialog = AlertDialog.Builder(this)
+        alertConfirmationDialog.setTitle("Confirmed deletion")
+        alertConfirmationDialog.setMessage("Deleted item")
+
+        alertQuestionDialog.setNegativeButton("Cancel") { dialog, which ->
+            dialog.dismiss()
+        }
+
+        alertQuestionDialog.setPositiveButton("Confirm") { dialog, which ->
+            repository.deleteAllocation(id, {}, {})
+            dialog.dismiss()
+            alertConfirmationDialog.show()
+        }
+
+        alertConfirmationDialog.setPositiveButton("Ok") { dialog , which ->
+            dialog.dismiss()
+            // TODO recarregar lista
+        }
+
+        alertQuestionDialog.show()
     }
 }

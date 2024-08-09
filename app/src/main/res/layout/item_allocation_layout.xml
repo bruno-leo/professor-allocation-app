@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/clContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="5dp"
-    android:padding="5dp"
     android:background="#c9c9c9"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:padding="5dp">
 
     <TextView
         android:id="@+id/tvDay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
         android:paddingEnd="5dp"
         android:text="TextView"
         android:textSize="15sp"
@@ -25,31 +26,34 @@
         android:id="@+id/tvStart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
         android:text="TextView"
-        android:textSize="15sp"
+        android:textSize="10sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/tvDay"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/tvDay"
+        app:layout_constraintStart_toEndOf="@+id/tvDay" />
 
     <TextView
         android:id="@+id/tvEnd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
         android:text="TextView"
-        android:textSize="15sp"
+        android:textSize="10sp"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/tvStart"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/tvStart"
+        app:layout_constraintStart_toEndOf="@+id/tvStart" />
 
     <TextView
         android:id="@+id/tvProfessorName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="20dp"
         android:paddingEnd="5dp"
         android:text="TextView"
         android:textSize="15sp"
@@ -61,10 +65,12 @@
         android:id="@+id/tvCourseName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="20dp"
         android:paddingStart="5dp"
         android:paddingEnd="5dp"
         android:text="TextView"
-        android:textSize="15sp"
+        android:textSize="10sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/tvProfessorName" />
@@ -73,9 +79,7 @@
         android:id="@+id/ibEditAlloc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="5dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/ibDeleteAlloc"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_edit" />
 
@@ -83,10 +87,9 @@
         android:id="@+id/ibDeleteAlloc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ibEditAlloc"
         app:srcCompat="@android:drawable/ic_menu_delete" />
 
 
