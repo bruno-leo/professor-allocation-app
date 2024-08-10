@@ -1,5 +1,6 @@
 package com.example.professorallocation.service
 
+import com.example.professorallocation.dto.ProfessorDto
 import com.example.professorallocation.model.Professor
 import retrofit2.Call
 import retrofit2.http.Body
@@ -17,8 +18,8 @@ interface ProfessorService {
     @GET("professors/{id}")
     fun getById(@Path("id") id: Int) : Call<Professor>
 
-    @POST("professors/{id}")
-    fun save(@Body professor: Professor) : Call<Any>
+    @POST("professors")
+    fun save(@Body professor: ProfessorDto) : Call<Any>
 
     @PUT("professors/{id}")
     fun update(@Path("id") id: Int, @Body professor: Professor) : Call<Professor>

@@ -13,7 +13,7 @@ class ProfessorAdapter(
     val onDelete: (id: Int) -> Unit
 ) : Adapter<ProfessorHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProfessorHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_layout, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_professor_layout, parent, false)
         return ProfessorHolder(view)
     }
 

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.professorallocation.R
 import com.example.professorallocation.adapter.DepartmentSpinnerAdapter
 import com.example.professorallocation.adapter.ProfessorAdapter
+import com.example.professorallocation.dto.ProfessorDto
 import com.example.professorallocation.model.Department
 import com.example.professorallocation.model.Professor
 import com.example.professorallocation.repository.DepartmentRepository
@@ -56,6 +57,8 @@ class ProfessorActivity : MainActivity() {
     }
 
     fun addProfessor() {
+        getDepartmentsForSpinner()
+
         val btAddProfessor = findViewById<FloatingActionButton>(R.id.btAddProfessor)
         btAddProfessor.setOnClickListener {
             addProfessorDialog()
@@ -64,16 +67,15 @@ class ProfessorActivity : MainActivity() {
 
     fun addProfessorDialog() {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_professor, null)
+        val adapter = DepartmentSpinnerAdapter(this, departmentsList)
+        val spinner = dialogView.findViewById<Spinner>(R.id.spDepartmentList)
+        spinner.adapter = adapter
+        setupSpinner(spinner, departmentsList)
+
         val etName = dialogView.findViewById<EditText>(R.id.etProfessorName)
         val etCpf = dialogView.findViewById<EditText>(R.id.etProfessorCpf)
         val buttonCancel = dialogView.findViewById<Button>(R.id.btCancelNewProfessor)
         val buttonConfirm = dialogView.findViewById<Button>(R.id.btConfirmNewProfessor)
-        val spinner = dialogView.findViewById<Spinner>(R.id.spDepartmentList)
-
-        getDepartmentsForSpinner()
-        val adapter = DepartmentSpinnerAdapter(this, departmentsList)
-        spinner.adapter = adapter
-        setupSpinner(spinner, departmentsList)
 
         val alertDialog = AlertDialog.Builder(this)
             .setView(dialogView)
@@ -87,11 +89,10 @@ class ProfessorActivity : MainActivity() {
             val name = etName.text.toString()
             val cpf = etCpf.text.toString()
             val selectedDepartment = spinner.selectedItem as Department
-            val newProfessor = Professor(
-                id = null,
+            val newProfessor = ProfessorDto(
                 name = name,
                 cpf = cpf,
-                department = selectedDepartment
+                departmentId = selectedDepartment.id
             )
             saveProfessor(newProfessor)
             alertDialog.dismiss()
@@ -130,7 +131,7 @@ class ProfessorActivity : MainActivity() {
 
     }
 
-    fun saveProfessor(professor: Professor) {
+    fun saveProfessor(professor: ProfessorDto) {
         repository.saveProfessor(professor, {}, {})
     }
 

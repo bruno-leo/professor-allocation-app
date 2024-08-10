@@ -1,5 +1,6 @@
 package com.example.professorallocation.repository
 
+import com.example.professorallocation.dto.ProfessorDto
 import com.example.professorallocation.model.Professor
 import com.example.professorallocation.service.ProfessorService
 import retrofit2.Call
@@ -10,7 +11,7 @@ class ProfessorRepository(
     private val professorService: ProfessorService
 ) {
     fun saveProfessor(
-        professor: Professor,
+        professor: ProfessorDto,
         onCall: () -> Unit,
         onError: () -> Unit
     ) {
