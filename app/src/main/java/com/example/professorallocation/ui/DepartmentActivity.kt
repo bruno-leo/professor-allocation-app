@@ -74,7 +74,8 @@ class DepartmentActivity : MainActivity() {
             )
             saveDepartment(newDepartment)
             alertDialog.dismiss()
-            // TODO recarregar lista
+            // update list
+            getDepartments()
         }
 
         alertDialog.show()
@@ -120,8 +121,9 @@ class DepartmentActivity : MainActivity() {
         }
 
         alertConfirmationDialog.setPositiveButton("Ok") { dialog , which ->
+            // update list
+            getDepartments()
             dialog.dismiss()
-            // TODO recarregar lista
         }
 
         alertQuestionDialog.show()

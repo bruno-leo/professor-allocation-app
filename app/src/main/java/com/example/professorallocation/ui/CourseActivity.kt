@@ -75,7 +75,8 @@ class CourseActivity : MainActivity() {
             )
             saveCourse(newCourse)
             alertDialog.dismiss()
-            // TODO recarregar lista
+            // update list
+            getCourses()
         }
 
         alertDialog.show()
@@ -159,8 +160,9 @@ class CourseActivity : MainActivity() {
         }
 
         alertConfirmationDialog.setPositiveButton("Ok") { dialog , which ->
+            // update list
+            getCourses()
             dialog.dismiss()
-            // TODO recarregar lista
         }
 
         alertQuestionDialog.show()

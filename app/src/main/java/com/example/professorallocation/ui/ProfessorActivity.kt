@@ -96,7 +96,8 @@ class ProfessorActivity : MainActivity() {
             )
             saveProfessor(newProfessor)
             alertDialog.dismiss()
-            // TODO recarregar lista
+            // update list
+            getProfessors()
         }
 
         alertDialog.show()
@@ -160,8 +161,9 @@ class ProfessorActivity : MainActivity() {
         }
 
         alertConfirmationDialog.setPositiveButton("Ok") { dialog , which ->
+            // update list
+            getProfessors()
             dialog.dismiss()
-            // TODO recarregar lista
         }
 
         alertQuestionDialog.show()

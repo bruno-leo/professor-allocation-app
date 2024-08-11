@@ -78,8 +78,9 @@ class AllocationActivity : MainActivity() {
         }
 
         alertConfirmationDialog.setPositiveButton("Ok") { dialog , which ->
+            // update list
+            getAllocations()
             dialog.dismiss()
-            // TODO recarregar lista
         }
 
         alertQuestionDialog.show()
