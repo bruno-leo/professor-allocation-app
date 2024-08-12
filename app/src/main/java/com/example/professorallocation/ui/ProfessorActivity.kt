@@ -114,7 +114,7 @@ class ProfessorActivity : MainActivity() {
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
-                // Do nothing
+                TODO("Not yet implemented")
             }
         }
     }
@@ -172,11 +172,11 @@ class ProfessorActivity : MainActivity() {
     fun getDepartmentsForSpinner() {
         departmentRepository.getDepartments(
             onCall = { departments ->
-                Log.i(">>>", "success get departments")
+                Log.i(">>>", "success get departments for spinner")
                 departments?.let { departmentsList = it }
             },
             onError = {
-                Log.e(">>>", "error get departments $it")
+                Log.e(">>>", "error get departments for spinner $it")
             }
         )
     }
