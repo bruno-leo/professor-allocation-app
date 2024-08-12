@@ -1,5 +1,6 @@
 package com.example.professorallocation.repository
 
+import com.example.professorallocation.dto.AllocationDto
 import com.example.professorallocation.model.Allocation
 import com.example.professorallocation.service.AllocationService
 import retrofit2.Call
@@ -10,7 +11,7 @@ class AllocationRepository(
     private val allocationService: AllocationService
 ) {
     fun saveAllocation(
-        allocation: Allocation,
+        allocation: AllocationDto,
         onCall: () -> Unit,
         onError: () -> Unit
     ) {

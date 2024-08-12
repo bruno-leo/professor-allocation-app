@@ -1,5 +1,6 @@
 package com.example.professorallocation.service
 
+import com.example.professorallocation.dto.AllocationDto
 import com.example.professorallocation.model.Allocation
 import retrofit2.Call
 import retrofit2.http.Body
@@ -17,8 +18,8 @@ interface AllocationService {
     @GET("allocations/{id}")
     fun getById(@Path("id") id: Int) : Call<Allocation>
 
-    @POST("allocations/{id}")
-    fun save(@Body allocation: Allocation) : Call<Any>
+    @POST("allocations")
+    fun save(@Body allocation: AllocationDto) : Call<Any>
 
     @PUT("allocations/{id}")
     fun update(@Path("id") id: Int, @Body allocation: Allocation) : Call<Allocation>

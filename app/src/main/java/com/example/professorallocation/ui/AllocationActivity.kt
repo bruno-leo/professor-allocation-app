@@ -1,16 +1,32 @@
 package com.example.professorallocation.ui
 
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.AdapterView
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import com.example.professorallocation.R
 import com.example.professorallocation.adapter.AllocationAdapter
+import com.example.professorallocation.adapter.AllocationCourseSpinnerAdapter
+import com.example.professorallocation.adapter.AllocationProfessorSpinnerAdapter
+import com.example.professorallocation.dto.AllocationDto
+import com.example.professorallocation.model.Allocation
+import com.example.professorallocation.model.Course
+import com.example.professorallocation.model.Professor
 import com.example.professorallocation.repository.AllocationRepository
 import com.example.professorallocation.repository.CourseRepository
 import com.example.professorallocation.repository.ProfessorRepository
 import com.example.professorallocation.repository.RetrofitConfig
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.util.Calendar
+import java.util.Locale
 
 class AllocationActivity : MainActivity() {
     private lateinit var rv: RecyclerView
@@ -18,6 +34,8 @@ class AllocationActivity : MainActivity() {
     private lateinit var repository: AllocationRepository
     private lateinit var professorRepository: ProfessorRepository
     private lateinit var courseRepository: CourseRepository
+    private var professorList: List<Professor> = emptyList()
+    private var courseList: List<Course> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +62,118 @@ class AllocationActivity : MainActivity() {
         rv.adapter = adapter
 
         getAllocations()
+        addAllocation()
+    }
+
+    fun addAllocation() {
+        getProfessorForSpinner()
+        getCoursesForSpinner()
+
+        val btAddAllocation = findViewById<FloatingActionButton>(R.id.btAddAllocation)
+        btAddAllocation.setOnClickListener {
+            addAllocationDialog()
+        }
+    }
+
+    fun addAllocationDialog() {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_allocation, null)
+        val professorAdapter = AllocationProfessorSpinnerAdapter(this, professorList)
+        val courseAdapter = AllocationCourseSpinnerAdapter(this, courseList)
+        val professorSpinner = dialogView.findViewById<Spinner>(R.id.spAllocationProfessor)
+        val courseSpinner = dialogView.findViewById<Spinner>(R.id.spAllocationCourse)
+        val daySpinner = dialogView.findViewById<Spinner>(R.id.spDaysOfWeek)
+        professorSpinner.adapter = professorAdapter
+        courseSpinner.adapter = courseAdapter
+        setupSpinner(professorSpinner, professorList)
+        setupSpinner(courseSpinner, courseList)
+        setupSpinnerDaysOfWeek(daySpinner)
+
+        val etStart = dialogView.findViewById<EditText>(R.id.etAllocationStartHour)
+        val etEnd = dialogView.findViewById<EditText>(R.id.etAllocationEndHour)
+        val buttonConfirm = dialogView.findViewById<Button>(R.id.btConfirmNewAllocation)
+        val buttonCancel = dialogView.findViewById<Button>(R.id.btCancelNewAllocation)
+
+        val alertDialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .create()
+
+        etStart.setOnClickListener {
+            showTimePickerDialog(etStart)
+        }
+
+        etEnd.setOnClickListener {
+            showTimePickerDialog(etEnd)
+        }
+
+        buttonCancel.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        buttonConfirm.setOnClickListener {
+            val selectedProfessor = professorSpinner.selectedItem as Professor
+            val selectedCourse = courseSpinner.selectedItem as Course
+
+            val newAllocation = AllocationDto(
+                day = daySpinner.selectedItem.toString(),
+                startHour = etStart.text.toString(),
+                endHour = etEnd.text.toString(),
+                professor = selectedProfessor.id,
+                course = selectedCourse.id
+            )
+            saveAllocation(newAllocation)
+            alertDialog.dismiss()
+            // update list
+            getAllocations()
+        }
+
+        alertDialog.show()
+    }
+
+    private fun showTimePickerDialog(editText: EditText) {
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+        val minute = calendar.get(Calendar.MINUTE)
+
+        val timePickerDialog = TimePickerDialog(
+            this,
+            { _, selectedHour, selectedMinute ->
+                val formattedTime = String.format(Locale.getDefault(), "%02d:%02d", selectedHour, selectedMinute)
+                editText.setText(formattedTime)
+            },
+            hour, minute, true
+        )
+
+        timePickerDialog.show()
+    }
+
+    fun setupSpinner(spinner: Spinner, list: List<Any>) {
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selectedItem = parent.getItemAtPosition(position) as Any
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+        }
+    }
+
+    fun setupCourseSpinner() {
+
+    }
+
+    fun setupSpinnerDaysOfWeek(spinner: Spinner) {
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                val selectItem = parent.getItemAtPosition(position).toString()
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+
+        }
     }
 
     fun getAllocations() {
@@ -56,6 +186,14 @@ class AllocationActivity : MainActivity() {
                 Log.e(">>>", "error get allocations $it")
             }
         )
+    }
+
+    fun saveAllocation(allocation: AllocationDto) {
+        repository.saveAllocation(allocation, {}, {})
+    }
+
+    fun updateAllocation(id: Int, allocation: Allocation) {
+
     }
 
     fun deleteAllocation(id: Int) {
@@ -84,5 +222,29 @@ class AllocationActivity : MainActivity() {
         }
 
         alertQuestionDialog.show()
+    }
+
+    private fun getProfessorForSpinner() {
+        professorRepository.getProfessors(
+            onCall = { professors ->
+                Log.i(">>>", "success get professors for spinner")
+                professors?.let { professorList = it }
+            },
+            onError = {
+                Log.e(">>>", "error get professors for spinner $it")
+            }
+        )
+    }
+
+    private fun getCoursesForSpinner() {
+        courseRepository.getCourses(
+            onCall = { courses ->
+                Log.i(">>>", "success get courses for spinner")
+                courses?.let { courseList = it }
+            },
+            onError = {
+                Log.e(">>>", "error get courses for spinner $it")
+            }
+        )
     }
 }

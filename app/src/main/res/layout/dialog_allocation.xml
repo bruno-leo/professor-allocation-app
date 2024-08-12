@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llAllocation"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="15dp"
+        android:text="Add a Allocation"
+        android:textSize="15sp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="15dp"
+        android:text="Day of Week"
+        android:textSize="15sp" />
+
+    <Spinner
+        android:id="@+id/spDaysOfWeek"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:spinnerMode="dropdown"
+        android:entries="@array/days_of_week" />
+
+    <EditText
+        android:id="@+id/etAllocationStartHour"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:hint="Select a start hour"
+        android:focusable="false"
+        android:inputType="none"
+        android:paddingBottom="15dp"/>
+
+    <EditText
+        android:id="@+id/etAllocationEndHour"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="15sp"
+        android:hint="Select a end hour"
+        android:focusable="false"
+        android:inputType="none"
+        android:paddingBottom="15dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="15dp"
+        android:text="Professor"
+        android:textSize="15sp" />
+
+    <Spinner
+        android:id="@+id/spAllocationProfessor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:spinnerMode="dropdown" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="15dp"
+        android:text="Course"
+        android:textSize="15sp" />
+
+    <Spinner
+        android:id="@+id/spAllocationCourse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:spinnerMode="dropdown" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:orientation="horizontal"
+        android:paddingTop="15dp">
+
+        <Button
+            android:id="@+id/btCancelNewAllocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:text="Cancel" />
+
+        <Button
+            android:id="@+id/btConfirmNewAllocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save" />
+    </LinearLayout>
+
+</LinearLayout>
