@@ -27,6 +27,7 @@
         android:layout_height="wrap_content"
         android:textSize="15sp"
         android:hint="Enter CPF"
+        android:inputType="number"
         android:paddingBottom="15dp"/>
 
     <TextView
