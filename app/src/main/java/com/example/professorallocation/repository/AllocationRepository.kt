@@ -13,15 +13,18 @@ class AllocationRepository(
     fun saveAllocation(
         allocation: AllocationDto,
         onCall: () -> Unit,
-        onError: () -> Unit
+        onError: (message: String) -> Unit
     ) {
         allocationService.save(allocation).enqueue(object : Callback<Any> {
             override fun onResponse(p0: Call<Any>, response: Response<Any>) {
-                onCall()
+                response.isSuccessful.let {
+                    if (it) onCall()
+                    else onError(response.message())
+                }
             }
 
             override fun onFailure(p0: Call<Any>, p1: Throwable) {
-                onError()
+                p1.message?.let { onError(it) }
             }
 
         })

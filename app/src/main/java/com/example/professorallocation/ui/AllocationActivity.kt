@@ -14,8 +14,9 @@ import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import com.example.professorallocation.R
 import com.example.professorallocation.adapter.AllocationAdapter
-import com.example.professorallocation.adapter.AllocationCourseSpinnerAdapter
-import com.example.professorallocation.adapter.AllocationProfessorSpinnerAdapter
+import com.example.professorallocation.adapter.spinner.AllocationCourseSpinnerAdapter
+import com.example.professorallocation.adapter.spinner.AllocationDayOfWeekSpinnerAdapter
+import com.example.professorallocation.adapter.spinner.AllocationProfessorSpinnerAdapter
 import com.example.professorallocation.dto.AllocationDto
 import com.example.professorallocation.model.Allocation
 import com.example.professorallocation.model.Course
@@ -25,6 +26,8 @@ import com.example.professorallocation.repository.CourseRepository
 import com.example.professorallocation.repository.ProfessorRepository
 import com.example.professorallocation.repository.RetrofitConfig
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import java.sql.Time
+import java.time.DayOfWeek
 import java.util.Calendar
 import java.util.Locale
 
@@ -79,11 +82,14 @@ class AllocationActivity : MainActivity() {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_allocation, null)
         val professorAdapter = AllocationProfessorSpinnerAdapter(this, professorList)
         val courseAdapter = AllocationCourseSpinnerAdapter(this, courseList)
+        val daysOfWeek = DayOfWeek.entries.map { it.name.uppercase() }
+        val daysOfWeekAdapter = AllocationDayOfWeekSpinnerAdapter(this, daysOfWeek)
         val professorSpinner = dialogView.findViewById<Spinner>(R.id.spAllocationProfessor)
         val courseSpinner = dialogView.findViewById<Spinner>(R.id.spAllocationCourse)
         val daySpinner = dialogView.findViewById<Spinner>(R.id.spDaysOfWeek)
         professorSpinner.adapter = professorAdapter
         courseSpinner.adapter = courseAdapter
+        daySpinner.adapter = daysOfWeekAdapter
         setupSpinner(professorSpinner, professorList)
         setupSpinner(courseSpinner, courseList)
         setupSpinnerDaysOfWeek(daySpinner)
@@ -112,13 +118,16 @@ class AllocationActivity : MainActivity() {
         buttonConfirm.setOnClickListener {
             val selectedProfessor = professorSpinner.selectedItem as Professor
             val selectedCourse = courseSpinner.selectedItem as Course
+            val selectedDayOfWeek = daySpinner.selectedItem as String
+            val selectedStartHour = etStart.text.toString().let { convertToTime(it) }
+            val selectedEndHour = etEnd.text.toString().let { convertToTime(it) }
 
             val newAllocation = AllocationDto(
-                day = daySpinner.selectedItem.toString(),
-                startHour = etStart.text.toString(),
-                endHour = etEnd.text.toString(),
-                professor = selectedProfessor.id,
-                course = selectedCourse.id
+                day = selectedDayOfWeek,
+                startHour = selectedStartHour,
+                endHour = selectedEndHour,
+                professorId = selectedProfessor.id,
+                courseId = selectedCourse.id
             )
             saveAllocation(newAllocation)
             alertDialog.dismiss()
@@ -127,6 +136,28 @@ class AllocationActivity : MainActivity() {
         }
 
         alertDialog.show()
+    }
+
+    private fun convertToTime(time: String): String? {
+        val parts = time.split(":")
+        return if (parts.size == 2) {
+            val hour = parts[0].toIntOrNull()
+            val minute = parts[1].toIntOrNull()
+
+            if (hour != null && minute != null) {
+                val calendar = Calendar.getInstance().apply {
+                    set(Calendar.HOUR_OF_DAY, hour)
+                    set(Calendar.MINUTE, minute)
+                    set(Calendar.SECOND, 0)
+                    set(Calendar.MILLISECOND, 0)
+                }
+                Time(calendar.timeInMillis).toString()
+            } else {
+                null
+            }
+        } else {
+            null
+        }
     }
 
     private fun showTimePickerDialog(editText: EditText) {

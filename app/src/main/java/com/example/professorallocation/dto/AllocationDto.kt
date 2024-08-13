@@ -4,6 +4,6 @@ data class AllocationDto(
     val day: String?,
     val startHour: String?,
     val endHour: String?,
-    val professor: Int?,
-    val course: Int?
+    val professorId: Int?,
+    val courseId: Int?
 )
