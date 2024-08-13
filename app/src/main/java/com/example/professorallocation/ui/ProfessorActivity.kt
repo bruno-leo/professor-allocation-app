@@ -12,7 +12,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
 import com.example.professorallocation.R
-import com.example.professorallocation.adapter.DepartmentSpinnerAdapter
+import com.example.professorallocation.adapter.spinner.DepartmentSpinnerAdapter
 import com.example.professorallocation.adapter.ProfessorAdapter
 import com.example.professorallocation.dto.ProfessorDto
 import com.example.professorallocation.model.Department

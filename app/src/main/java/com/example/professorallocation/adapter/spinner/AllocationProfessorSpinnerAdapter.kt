@@ -1,4 +1,4 @@
-package com.example.professorallocation.adapter
+package com.example.professorallocation.adapter.spinner
 
 import android.content.Context
 import android.view.LayoutInflater
