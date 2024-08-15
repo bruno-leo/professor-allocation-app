@@ -30,7 +30,7 @@ class AllocationHolder(rootView: View) : ViewHolder(rootView) {
         tvCourseName.text = allocation.course?.name
 
         ibEditAlloc.setOnClickListener {
-//            onEdit(allocation.id!!, allocation)
+            onEdit(allocation.id!!, allocation)
         }
 
         ibDeleteAlloc.setOnClickListener {
