@@ -28,4 +28,11 @@ class CourseAdapter(
         list = courses
         notifyDataSetChanged()
     }
+
+    fun updateCourses(id: Int, newCourse: Course) {
+        val course = list.find { it.id == id }
+        val position = list.indexOf(course)
+        list[position].name = newCourse.name
+        notifyItemChanged(position)
+    }
 }

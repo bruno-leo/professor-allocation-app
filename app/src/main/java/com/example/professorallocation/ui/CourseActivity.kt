@@ -112,19 +112,6 @@ class CourseActivity : MainActivity() {
             .setView(dialogView)
             .create()
 
-        /*editText.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, start: Int, count: Int, after: Int) {
-                TODO("Not yet implemented")
-            }
-            override fun onTextChanged(p0: CharSequence?, start: Int, count: Int, after: Int) {
-                TODO("Not yet implemented")
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                newName = s.toString()
-            }
-        })*/
-
         buttonCancel.setOnClickListener {
             alertDialog.dismiss()
         }
@@ -136,8 +123,13 @@ class CourseActivity : MainActivity() {
                 up.name = newName
             }
 
-            repository.updateCourse(id, course, {}, {})
+            repository.updateCourse(id, course, {
+                adapter.updateCourses(id, course)
+            }, {})
+            alertDialog.dismiss()
         }
+
+        alertDialog.show()
     }
 
     fun deleteCourse(id: Int) {
