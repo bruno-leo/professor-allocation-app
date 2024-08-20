@@ -1,5 +1,6 @@
 package com.example.professorallocation.repository
 
+import android.util.Log
 import com.example.professorallocation.model.Department
 import com.example.professorallocation.service.DepartmentService
 import retrofit2.Call
@@ -40,7 +41,10 @@ class DepartmentRepository(
             }
 
             override fun onFailure(p0: Call<List<Department>>, p1: Throwable) {
-                p1.message?.let { onError(it) }
+                p1.message?.let {
+                    Log.i(">>>", it)
+                    onError(it)
+                }
             }
 
         })

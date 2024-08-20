@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.widget.Button
 import android.widget.EditText
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
@@ -98,7 +99,39 @@ class DepartmentActivity : MainActivity() {
     }
 
     fun updateDepartment(id: Int, department: Department) {
-        repository.updateDepartment(id, department, {}, {})
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_department, null)
+        val tvLabel = dialogView.findViewById<TextView>(R.id.tvLabelDepartment)
+        val editText = dialogView.findViewById<EditText>(R.id.etNameDepartment)
+        val buttonCancel = dialogView.findViewById<Button>(R.id.btCancelNewDepartment)
+        val buttonConfirm = dialogView.findViewById<Button>(R.id.btConfirmNewDepartment)
+        var newName: String?
+
+        tvLabel.text = "Update the Department"
+        buttonConfirm.text = "Update"
+        editText.setText(department.name)
+
+        val alertDialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .create()
+
+        buttonCancel.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        buttonConfirm.setOnClickListener {
+            newName = editText.text.toString()
+            department.let { up ->
+                up.id = id
+                up.name = newName
+            }
+
+            repository.updateDepartment(id, department, {
+                adapter.updateDepartments(id, department)
+            }, {})
+            alertDialog.dismiss()
+        }
+
+        alertDialog.show()
     }
 
     fun deleteDeparment(id: Int) {

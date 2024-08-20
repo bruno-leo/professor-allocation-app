@@ -28,4 +28,11 @@ class DeparmentAdapter(
         list = departments
         notifyDataSetChanged()
     }
+
+    fun updateDepartments(id: Int, newDepartment: Department) {
+        val department = list.find { it.id == id }
+        val position = list.indexOf(department)
+        list[position].name = newDepartment.name
+        notifyItemChanged(position)
+    }
 }
