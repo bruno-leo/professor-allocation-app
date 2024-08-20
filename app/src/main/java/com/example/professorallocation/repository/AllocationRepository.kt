@@ -1,5 +1,6 @@
 package com.example.professorallocation.repository
 
+import android.util.Log
 import com.example.professorallocation.dto.AllocationDto
 import com.example.professorallocation.model.Allocation
 import com.example.professorallocation.service.AllocationService
@@ -43,7 +44,10 @@ class AllocationRepository(
             }
 
             override fun onFailure(p0: Call<List<Allocation>>, p1: Throwable) {
-                p1.message?.let { onError(it) }
+                p1.message?.let {
+                    Log.i(">>>", it)
+                    onError(it)
+                }
             }
 
         })

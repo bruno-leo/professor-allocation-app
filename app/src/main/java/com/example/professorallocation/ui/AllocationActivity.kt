@@ -9,6 +9,7 @@ import android.widget.AdapterView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
@@ -56,7 +57,7 @@ class AllocationActivity : MainActivity() {
         rv = findViewById(R.id.rvAllocationList)
         adapter = AllocationAdapter(
             onEdit = { id, allocation ->
-
+                updateAllocation(id, allocation)
             },
             onDelete = { id ->
                 deleteAllocation(id)
@@ -224,7 +225,78 @@ class AllocationActivity : MainActivity() {
     }
 
     fun updateAllocation(id: Int, allocation: Allocation) {
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_allocation, null)
+        val professorAdapter = AllocationProfessorSpinnerAdapter(this, professorList)
+        val courseAdapter = AllocationCourseSpinnerAdapter(this, courseList)
+        val daysOfWeek = DayOfWeek.entries.map { it.name.uppercase() }
+        val daysOfWeekAdapter = AllocationDayOfWeekSpinnerAdapter(this, daysOfWeek)
+        val professorSpinner = dialogView.findViewById<Spinner>(R.id.spAllocationProfessor)
+        val courseSpinner = dialogView.findViewById<Spinner>(R.id.spAllocationCourse)
+        val daySpinner = dialogView.findViewById<Spinner>(R.id.spDaysOfWeek)
+        professorSpinner.adapter = professorAdapter
+        courseSpinner.adapter = courseAdapter
+        daySpinner.adapter = daysOfWeekAdapter
+        setupSpinner(professorSpinner, professorList)
+        setupSpinner(courseSpinner, courseList)
+        setupSpinnerDaysOfWeek(daySpinner)
 
+        val tvLabel = dialogView.findViewById<TextView>(R.id.tvLabelAllocation)
+        val etStart = dialogView.findViewById<EditText>(R.id.etAllocationStartHour)
+        val etEnd = dialogView.findViewById<EditText>(R.id.etAllocationEndHour)
+        val buttonConfirm = dialogView.findViewById<Button>(R.id.btConfirmNewAllocation)
+        val buttonCancel = dialogView.findViewById<Button>(R.id.btCancelNewAllocation)
+
+        tvLabel.text = "Update the Allocation"
+        buttonConfirm.text = "Update"
+        etStart.setText(allocation.startHour)
+        etEnd.setText(allocation.endHour)
+        val positionProfessor = professorList.indexOf(allocation.professor)
+        professorSpinner.let {
+            if (positionProfessor != -1) it.setSelection(positionProfessor)
+        }
+        val coursePosition = courseList.indexOf(allocation.course)
+        courseSpinner.let {
+            if (coursePosition != -1) it.setSelection(coursePosition)
+        }
+
+        val alertDialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .create()
+
+        etStart.setOnClickListener {
+            showTimePickerDialog(etStart)
+        }
+
+        etEnd.setOnClickListener {
+            showTimePickerDialog(etEnd)
+        }
+
+        buttonCancel.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        buttonConfirm.setOnClickListener {
+            val selectedProfessor = professorSpinner.selectedItem as Professor
+            val selectedCourse = courseSpinner.selectedItem as Course
+            val selectedDayOfWeek = daySpinner.selectedItem as DayOfWeek
+            val selectedStartHour = etStart.text.toString().let { convertToTime(it) }
+            val selectedEndHour = etEnd.text.toString().let { convertToTime(it) }
+            val allocation = Allocation(
+                null,
+                day = selectedDayOfWeek,
+                startHour = selectedStartHour,
+                endHour = selectedEndHour,
+                selectedProfessor,
+                selectedCourse
+            )
+
+            repository.updateAllocation(id, allocation, {
+                adapter.updateAllocations(id, allocation)
+            }, {})
+            alertDialog.dismiss()
+        }
+
+        alertDialog.show()
     }
 
     fun deleteAllocation(id: Int) {

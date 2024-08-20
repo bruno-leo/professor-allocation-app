@@ -28,4 +28,15 @@ class AllocationAdapter(
         list = allocations
         notifyDataSetChanged()
     }
+
+    fun updateAllocations(id: Int, newAllocation: Allocation) {
+        val allocation = list.find { it.id == id }
+        val position = list.indexOf(allocation)
+        list[position].day = newAllocation.day
+        list[position].startHour = newAllocation.startHour
+        list[position].endHour = newAllocation.endHour
+        list[position].professor = newAllocation.professor
+        list[position].course = newAllocation.course
+        notifyItemChanged(position)
+    }
 }
