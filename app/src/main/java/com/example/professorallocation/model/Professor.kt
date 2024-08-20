@@ -1,8 +1,8 @@
 package com.example.professorallocation.model
 
 data class Professor(
-    val id: Int?,
-    val name: String?,
-    val cpf: String?,
-    val department: Department?
+    var id: Int?,
+    var name: String?,
+    var cpf: String?,
+    var department: Department?
 )

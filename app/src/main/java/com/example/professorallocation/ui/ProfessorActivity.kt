@@ -8,6 +8,7 @@ import android.widget.AdapterView
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.RecyclerView
@@ -67,9 +68,9 @@ class ProfessorActivity : MainActivity() {
 
     fun addProfessorDialog() {
         val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_professor, null)
-        val adapter = DepartmentSpinnerAdapter(this, departmentsList)
+        val spinnerAdapter = DepartmentSpinnerAdapter(this, departmentsList)
         val spinner = dialogView.findViewById<Spinner>(R.id.spDepartmentList)
-        spinner.adapter = adapter
+        spinner.adapter = spinnerAdapter
         setupSpinner(spinner, departmentsList)
 
         val etName = dialogView.findViewById<EditText>(R.id.etProfessorName)
@@ -137,8 +138,55 @@ class ProfessorActivity : MainActivity() {
     }
 
     fun updateProfessor(id: Int, professor: Professor) {
-        //TODO implementar layout
-        repository.updateProfessor(id, professor, {}, {})
+        val dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_professor, null)
+        val tvLabel = dialogView.findViewById<TextView>(R.id.tvLabelProfessor)
+        val spinnerAdapter = DepartmentSpinnerAdapter(this, departmentsList)
+        val spinner = dialogView.findViewById<Spinner>(R.id.spDepartmentList)
+        spinner.adapter = spinnerAdapter
+        setupSpinner(spinner, departmentsList)
+
+        val etName = dialogView.findViewById<EditText>(R.id.etProfessorName)
+        val etCpf = dialogView.findViewById<EditText>(R.id.etProfessorCpf)
+        val buttonCancel = dialogView.findViewById<Button>(R.id.btCancelNewProfessor)
+        val buttonConfirm = dialogView.findViewById<Button>(R.id.btConfirmNewProfessor)
+        var newName: String?
+        var newCpf: String?
+
+        tvLabel.text = "Update the Professor"
+        buttonConfirm.text = "Update"
+        etName.setText(professor.name)
+        etCpf.setText(professor.cpf)
+        val defaultPosition = departmentsList.indexOf(professor.department)
+        spinner.let {
+            if (defaultPosition != -1) it.setSelection(defaultPosition)
+        }
+
+        val alertDialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .create()
+
+        buttonCancel.setOnClickListener {
+            alertDialog.dismiss()
+        }
+
+        buttonConfirm.setOnClickListener {
+            newName = etName.text.toString()
+            newCpf = etCpf.text.toString()
+            val selectedDepartment = spinner.selectedItem as Department
+            val professor = Professor(
+                null,
+                newName,
+                newCpf,
+                selectedDepartment
+            )
+
+            repository.updateProfessor(id, professor, {
+                adapter.updateProfessors(id, professor)
+            }, {})
+            alertDialog.dismiss()
+        }
+
+        alertDialog.show()
     }
 
     fun deleteProfessor(id: Int) {

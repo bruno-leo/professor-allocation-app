@@ -28,4 +28,13 @@ class ProfessorAdapter(
         list = professors
         notifyDataSetChanged()
     }
+
+    fun updateProfessors(id: Int, newProfessor: Professor) {
+        val professor = list.find { it.id == id }
+        val position = list.indexOf(professor)
+        list[position].name = newProfessor.name
+        list[position].cpf = newProfessor.cpf
+        list[position].department = newProfessor.department
+        notifyItemChanged(position)
+    }
 }
